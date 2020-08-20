@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .post-item{
+            border: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="text" name="" id="title">
+    <div>
+        <textarea name="" id="post-input" cols="30" rows="10"></textarea>
+    </div>
+    <button id="submit">Submit</button> 
+    <button id="update">update</button> 
+    <button id="delete">delete</button> 
+    
+
+    
+    <div id="root">
+
+    </div>
+    <script>
+
+        let submitBtn = document.getElementById('submit');
+        let updateBtn = document.getElementById('update');
+        let deleteBtn = document.getElementById('delete');
+
+
+        deleteBtn.addEventListener('click',() => {
+            
+             console.log('hello');
+            deletePost("2accb202-36a1-49a8-9d59-6c3ae6a34f09");
+
+        })
+
+        updateBtn.addEventListener('click', () => {
+        let title = document.getElementById('title').value;
+        let post = document.getElementById('post-input').value;
+        let updatedPost  = {
+               id:"d3d68a17-fbec-4fd4-a99c-a486183221a9",
+               title,
+               post
+           }
+           console.log(updatePost, 'hhhh' );
+            updatePost(updatedPost);
+        })
+      
+        submitBtn.addEventListener('click',() => {
+
+        let title = document.getElementById('title').value;
+        let post = document.getElementById('post-input').value;
+        console.log(title ,post + 'tests');
+           let newPost  = {
+               title,
+               post
+           }
+            createPost(newPost);
+        })
+      document.addEventListener('DOMContentLoaded',() => {
+          getPost();
+      })
+
+  function getPost(){
+    fetch('http://54.144.250.94/',{
+        method:"get",
+        }).then((data) => {
+            return data.json();
+        }).then((datajson) =>{
+          let root = document.getElementById('root');
+          for(data of datajson){
+             
+            root.innerHTML += `
+            <span>${data.id}</span>
+            <div class="post-item"><h1>${data.title}</h1>
+                              <div class="desc">${data.post}</div>
+                              </div>
+                              \n
+                              `
+          }
+     
+
+            console.log(datajson);
+        })
+  }
+  
+  function createPost(post){
+      console.log(post);
+    fetch('http://54.144.250.94/',{
+        method:"post",
+        headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+       body:JSON.stringify(post)
+        }).then((data) => {
+            return data.json();
+        }).then((datajson) =>{
+          
+
+            console.log(datajson);
+        })
+    
+  }
+
+  function updatePost(post){
+      console.log(post);
+    fetch('http://54.144.250.94/',{
+        method:"put",
+        headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+       body:JSON.stringify(post)
+        }).then((data) => {
+            return data;
+        })
+    
+  }
+    
+  function deletePost(postid){
+      
+    fetch(`http://54.144.250.94/${postid}`,{
+        method:"delete",
+        }).then((data) => {
+
+            console.log(log)
+            return data;
+        })
+    
+  }
+
+
+ 
+    </script>
+</body>
+</html>
